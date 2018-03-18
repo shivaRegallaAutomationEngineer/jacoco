@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.jacoco.core.internal.instr;
 
-import org.jacoco.core.internal.data.CRC64;
 import org.jacoco.core.internal.flow.ClassProbesAdapter;
 import org.jacoco.core.runtime.IExecutionDataAccessorGenerator;
 import org.objectweb.asm.ClassReader;
@@ -30,19 +29,21 @@ public final class ProbeArrayStrategyFactory {
 	 * Creates a suitable strategy instance for the class described by the given
 	 * reader. Created instance must be used only to process a class or
 	 * interface for which it has been created and must be used only once.
-	 * 
+	 *
+	 * @param classId
+	 *            class identifier
 	 * @param reader
 	 *            reader to get information about the class
 	 * @param accessorGenerator
 	 *            accessor to the coverage runtime
 	 * @return strategy instance
 	 */
-	public static IProbeArrayStrategy createFor(final ClassReader reader,
+	public static IProbeArrayStrategy createFor(final long classId,
+			final ClassReader reader,
 			final IExecutionDataAccessorGenerator accessorGenerator) {
 
 		final String className = reader.getClassName();
 		final int version = getVersion(reader);
-		final long classId = CRC64.classId(reader.b);
 		final boolean withFrames = version >= Opcodes.V1_6;
 
 		if (isInterfaceOrModule(reader)) {
